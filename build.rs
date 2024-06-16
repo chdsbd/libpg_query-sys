@@ -4,10 +4,10 @@ use glob::glob;
 use std::env;
 use std::path::{Path, PathBuf};
 
-// https://github.com/pganalyze/pg_query.rs/blob/5562e4aeea885ef514134dcb084d98d6993c8c3a/build.rs
 static SOURCE_DIRECTORY: &str = "libpg_query";
 static LIBRARY_NAME: &str = "pg_query";
 
+// https://github.com/pganalyze/pg_query.rs/blob/5562e4aeea885ef514134dcb084d98d6993c8c3a/build.rs
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
     let build_path = Path::new(".").join("c_libs").join(SOURCE_DIRECTORY);
@@ -21,6 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let source_paths = vec![
         build_path.join("pg_query").with_extension("h"),
         build_path.join("src"),
+        build_path.join("protobuf"),
         build_path.join("vendor"),
     ];
 
@@ -44,7 +45,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .unwrap()
                 .map(|p| p.unwrap()),
         )
+        .file(out_dir.join("vendor/protobuf-c/protobuf-c.c"))
         .file(out_dir.join("vendor/xxhash/xxhash.c"))
+        .file(out_dir.join("protobuf/pg_query.pb-c.c"))
         .include(out_dir.join("."))
         .include(out_dir.join("./vendor"))
         .include(out_dir.join("./src/postgres/include"))
