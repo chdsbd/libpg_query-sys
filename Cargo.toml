@@ -16,6 +16,9 @@ path = "src/lib.rs"
 [build-dependencies]
 bindgen = "0.64.0"
 make-cmd = "0.1.0"
+fs_extra = "*"
+glob = "*"
+cc = "1.0.83"
 
 [workspace.metadata.release]
 allow-branch = ["master"]
